@@ -114,17 +114,12 @@ UART/
 ├── sim/                                             # Môi trường mô phỏng kiểm chứng (ModelSim)
 │   ├── tb_uart_rx.vhd                               # Self-checking Testbench kiểm thử tự động 5 kịch bản biên
 │   └── run.do                                       # Tcl/DO script tự động biên dịch và cấu hình cửa sổ Waveform
-├── docs/                                            # Bộ tài liệu báo cáo đồ án, nguyên lý và hướng dẫn thực hành
-│   ├── BAO_CAO_DO_AN_UART_RECEIVER.md               # Báo cáo đồ án toàn diện (Lý thuyết, Thiết kế, Synthesis, STA)
-│   ├── BAO_CAO_DO_AN_UART_RECEIVER.docx             # Báo cáo đồ án định dạng Microsoft Word
-│   ├── NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md      # Tài liệu phân tích chuyên sâu nguyên lý, sơ đồ khối & Timing
-│   ├── NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx    # Tài liệu nguyên lý định dạng Microsoft Word
-│   ├── GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.md        # Giải thích chi tiết từng dòng mã VHDL của toàn bộ 5 module
-│   ├── HUONG_DAN_TEST_KIT_CHI_TIET.md               # Hướng dẫn vận hành và kiểm thử thực tế 2 chế độ trên Kit DE2-115
-│   └── HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md     # Hướng dẫn cài đặt và dùng phần mềm Hercules kết nối Laptop ↔ FPGA
-├── scripts/                                         # Các script Python tiện ích tự động xuất báo cáo Word (.docx)
-│   ├── export_docx.py                               # Script chuyển đổi báo cáo Markdown sang Word chuẩn định dạng
-│   └── generate_nguyen_ly_report.py                 # Script sinh tài liệu nguyên lý hoạt động (.docx)
+├── docs/                                            # Bộ tài liệu báo cáo đồ án, nguyên lý và hướng dẫn thực hành (.docx)
+│   ├── BAO_CAO_DO_AN_UART_RECEIVER.docx             # Báo cáo đồ án toàn diện (Lý thuyết, Thiết kế, Synthesis, STA)
+│   ├── NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx    # Tài liệu phân tích chuyên sâu nguyên lý, sơ đồ khối & Timing
+│   ├── GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx      # Giải thích chi tiết từng dòng mã VHDL của toàn bộ 5 module
+│   ├── HUONG_DAN_TEST_KIT_CHI_TIET.docx             # Hướng dẫn vận hành và kiểm thử thực tế 2 chế độ trên Kit DE2-115
+│   └── HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx   # Hướng dẫn cài đặt và dùng phần mềm Hercules kết nối Laptop ↔ FPGA
 ├── output_files/                                    # Kết quả tổng hợp & Bitstream nạp mạch FPGA
 │   ├── DE2_115_UART_RX.sof                          # File cấu hình SRAM Object File sẵn sàng nạp xuống Kit DE2-115
 │   └── DE2_115_UART_RX.cdf                          # Cấu hình Chain Description File cho Quartus Programmer
@@ -145,11 +140,11 @@ Toàn bộ tài liệu học thuật, giải thích mã nguồn và hướng d�
 
 | STT | Tài liệu | Nội dung chính | Liên kết |
 | :-: | :--- | :--- | :---: |
-| **1** | **Báo cáo Đồ án Thiết kế UART Receiver** | Đặt vấn đề, cơ sở lý thuyết 16x Oversampling & Metastability, thiết kế RTL, kết quả Synthesis (`154 LEs`), phân tích STA ($F_{\max} = 231.7\text{ MHz}$) và thực nghiệm trên DE2-115. | [`docs/BAO_CAO_DO_AN_UART_RECEIVER.md`](docs/BAO_CAO_DO_AN_UART_RECEIVER.md) |
-| **2** | **Nguyên lý Hoạt động & Sơ đồ Khối UART RX** | Phân tích toán học sai số tốc độ Baud ($+0.47\%$), sơ đồ Datapath & Control Unit, bảng chuyển trạng thái FSM Moore và giản đồ định thời (Timing Diagram). | [`docs/NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md`](docs/NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md) |
-| **3** | **Giải thích Chi tiết Từng Dòng Code VHDL** | Giải thích cặn kẽ từng khối lệnh VHDL của cả 5 file trong `rtl/` (`uart_rx_top`, `uart_rx`, `uart_tx`, `hex_to_7seg`, `pulse_stretcher`). | [`docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.md`](docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.md) |
-| **4** | **Hướng dẫn Kiểm thử Thực tế trên Kit DE2-115** | Bảng tra cứu nhanh nút nhấn `KEY`, công tắc `SW`, đèn `LEDR`/`HEX` và các kịch bản kiểm thử từng bước cho cả chế độ On-Board Test và chế độ PC. | [`docs/HUONG_DAN_TEST_KIT_CHI_TIET.md`](docs/HUONG_DAN_TEST_KIT_CHI_TIET.md) |
-| **5** | **Hướng dẫn Cài đặt & Sử dụng Hercules** | Hướng dẫn kiểm tra cổng `COM`, cấu hình phần mềm Hercules (`115200, 8N1`), truyền ký tự ASCII/Hex và biểu diễn tính năng phát hiện lỗi khung (`Framing Error`). | [`docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md`](docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md) |
+| **1** | **Báo cáo Đồ án Thiết kế UART Receiver** | Đặt vấn đề, cơ sở lý thuyết 16x Oversampling & Metastability, thiết kế RTL, kết quả Synthesis (`154 LEs`), phân tích STA ($F_{\max} = 231.7\text{ MHz}$) và thực nghiệm trên DE2-115. | [`docs/BAO_CAO_DO_AN_UART_RECEIVER.docx`](docs/BAO_CAO_DO_AN_UART_RECEIVER.docx) |
+| **2** | **Nguyên lý Hoạt động & Sơ đồ Khối UART RX** | Phân tích toán học sai số tốc độ Baud ($+0.47\%$), sơ đồ Datapath & Control Unit, bảng chuyển trạng thái FSM Moore và giản đồ định thời (Timing Diagram). | [`docs/NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx`](docs/NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx) |
+| **3** | **Giải thích Chi tiết Từng Dòng Code VHDL** | Giải thích cặn kẽ từng khối lệnh VHDL của cả 5 file trong `rtl/` (`uart_rx_top`, `uart_rx`, `uart_tx`, `hex_to_7seg`, `pulse_stretcher`). | [`docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx`](docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx) |
+| **4** | **Hướng dẫn Kiểm thử Thực tế trên Kit DE2-115** | Bảng tra cứu nhanh nút nhấn `KEY`, công tắc `SW`, đèn `LEDR`/`HEX` và các kịch bản kiểm thử từng bước cho cả chế độ On-Board Test và chế độ PC. | [`docs/HUONG_DAN_TEST_KIT_CHI_TIET.docx`](docs/HUONG_DAN_TEST_KIT_CHI_TIET.docx) |
+| **5** | **Hướng dẫn Cài đặt & Sử dụng Hercules** | Hướng dẫn kiểm tra cổng `COM`, cấu hình phần mềm Hercules (`115200, 8N1`), truyền ký tự ASCII/Hex và biểu diễn tính năng phát hiện lỗi khung (`Framing Error`). | [`docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx`](docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx) |
 
 ---
 
@@ -187,7 +182,7 @@ Nhấp đúp vào file [`CHAY_MO_PHONG_WAVE.bat`](CHAY_MO_PHONG_WAVE.bat) ở th
 3. **Truyền & Nhận Echo:** Gõ phím bất kỳ trên bàn phím Laptop (hoặc gửi mã Hex từ mục *Send*):
    - Mã Hexa và nhị phân hiển thị tức thời trên **`HEX1:HEX0`** và **`LEDR[7:0]`**, đèn **`LEDR[8]`** nháy sáng 100 ms, đồng thời ký tự được FPGA **Echo** ngược lại màn hình Hercules.
 4. **Thử nghiệm bắt lỗi khung (Framing Error):** Đổi tạm tốc độ Baud trên Hercules sang `9600` và gửi 1 ký tự -> Đèn **`LEDR[9]`** lập tức bật sáng chốt cờ lỗi khung truyền; nhấn nút **`KEY[1]`** trên Kit để xóa lỗi.
-   *(Xem hướng dẫn chi tiết kèm hình minh họa tại [`docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md`](docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md)).*
+   *(Xem hướng dẫn chi tiết kèm hình minh họa tại [`docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx`](docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx)).*
 
 ---
 

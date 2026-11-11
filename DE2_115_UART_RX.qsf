@@ -1,8 +1,8 @@
 # ==============================================================================
-# Quartus Prime Settings File (.qsf)
+# Quartus Prime Settings File
 # Project  : DE2_115_UART_RX
 # Top-Level: uart_rx_top
-# Target   : Cyclone IV E EP4CE115F29C7 (Terasic DE2-115 Development Board)
+# Target   : Cyclone IV E EP4CE115F29C7 - Terasic DE2-115 Development Board
 # ==============================================================================
 
 set_global_assignment -name FAMILY "Cyclone IV E"
@@ -27,13 +27,13 @@ set_global_assignment -name VHDL_FILE rtl/uart_rx_top.vhd
 set_global_assignment -name SDC_FILE DE2_115_UART_RX.sdc
 
 # ------------------------------------------------------------------------------
-# Gan chan CLOCK_50 (50 MHz)
+# Gan chan CLOCK_50 50 MHz
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_Y2 -to CLOCK_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
 
 # ------------------------------------------------------------------------------
-# Gan chan UART RS-232 (Cổng DB9 qua chip chuyển mức MAX3232)
+# Gan chan UART RS-232 qua cong DB9 va chip chuyen muc MAX3232
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_G12 -to UART_RXD
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RXD
@@ -42,10 +42,10 @@ set_location_assignment PIN_G9 -to UART_TXD
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TXD
 
 # ------------------------------------------------------------------------------
-# Gan chan Push Button (KEY)
-# KEY[0]: Reset he thong (Active-Low)
-# KEY[1]: Xoa co Framing Error (Active-Low)
-# KEY[2]: Phat du lieu On-board tu SW[7..0] (Active-Low)
+# Gan chan Push Button KEY
+# KEY[0]: Reset he thong tich cuc muc thap
+# KEY[1]: Xoa co Framing Error tich cuc muc thap
+# KEY[2]: Phat du lieu On-board tu SW[7..0] tich cuc muc thap
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_M23 -to KEY[0]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[0]
@@ -57,9 +57,9 @@ set_location_assignment PIN_N21 -to KEY[2]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[2]
 
 # ------------------------------------------------------------------------------
-# Gan chan Cong tac gat (SW)
+# Gan chan Cong tac gat SW
 # SW[7..0] : 8 bit du lieu phat On-board
-# SW[17]   : Che do hoat dong (1 = On-Board Loopback Test, 0 = External PC DB9)
+# SW[17]   : Che do hoat dong: 1 = On-Board Loopback Test, 0 = External PC DB9
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_AB28 -to SW[0]
 set_location_assignment PIN_AC28 -to SW[1]
@@ -100,14 +100,14 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[16]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[17]
 
 # ------------------------------------------------------------------------------
-# Gan chan LED do (LEDR)
+# Gan chan LED do LEDR
 # LEDR[7..0]   : 8 bit du lieu nhan duoc
 # LEDR[8]      : Xung bao rx_done keo dai 100 ms
-# LEDR[9]      : Co bao loi khung truyen (Framing Error)
-# LEDR[12..10] : Ma hoa trang thai FSM Moore (000=IDLE .. 101=DONE)
+# LEDR[9]      : Co bao loi khung truyen Framing Error
+# LEDR[12..10] : Ma hoa trang thai FSM Moore tu 000=IDLE den 101=DONE
 # LEDR[15..13] : Du phong
-# LEDR[16]     : Bao UART TX dang ban truyen (tx_busy)
-# LEDR[17]     : Bao che do On-Board Test Mode dang BAT (SW[17] = 1)
+# LEDR[16]     : Bao UART TX dang ban truyen
+# LEDR[17]     : Bao che do On-Board Test Mode dang bat khi SW[17] = 1
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_G19 -to LEDR[0]
 set_location_assignment PIN_F19 -to LEDR[1]
@@ -148,7 +148,7 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[16]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[17]
 
 # ------------------------------------------------------------------------------
-# Gan chan LED 7 doan HEX0 (Low Nibble: bit 3..0)
+# Gan chan LED 7 doan HEX0 hien thi 4 bit thap 3..0
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_G18 -to HEX0[0]
 set_location_assignment PIN_F22 -to HEX0[1]
@@ -167,7 +167,7 @@ set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[5]
 set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[6]
 
 # ------------------------------------------------------------------------------
-# Gan chan LED 7 doan HEX1 (High Nibble: bit 7..4)
+# Gan chan LED 7 doan HEX1 hien thi 4 bit cao 7..4
 # ------------------------------------------------------------------------------
 set_location_assignment PIN_M24 -to HEX1[0]
 set_location_assignment PIN_Y22 -to HEX1[1]

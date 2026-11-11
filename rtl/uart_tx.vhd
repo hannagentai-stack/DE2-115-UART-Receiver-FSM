@@ -4,9 +4,9 @@
 -- Author   : FPGA Design Engineer
 -- Standard : VHDL-93 / VHDL-2008
 -- Description:
---   Khối UART Transmitter (TX) đơn giản phục vụ tính năng Echo dữ liệu.
+--   Khối UART Transmitter đơn giản phục vụ tính năng Echo dữ liệu.
 --   Khi nhận được xung tx_start, khối sẽ truyền byte tx_data qua đường tx:
---   1 start bit ('0'), 8 data bit (LSB trước), 1 stop bit ('1').
+--   1 start bit mức '0', 8 data bit truyền LSB trước, 1 stop bit mức '1'.
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -15,11 +15,11 @@ use ieee.numeric_std.all;
 
 entity uart_tx is
     generic (
-        CLK_FREQ  : natural := 50_000_000; -- Tần số clock hệ thống (Hz)
-        BAUD_RATE : natural := 115_200     -- Tốc độ baud (bps)
+        CLK_FREQ  : natural := 50_000_000; -- Tần số clock hệ thống tính theo Hz
+        BAUD_RATE : natural := 115_200     -- Tốc độ baud tính theo bps
     );
     port (
-        clk      : in  std_logic;                    -- Clock hệ thống (50 MHz)
+        clk      : in  std_logic;                    -- Clock hệ thống 50 MHz
         rst_n    : in  std_logic;                    -- Reset bất đồng bộ mức thấp
         tx_start : in  std_logic;                    -- Xung kích hoạt truyền 1 byte
         tx_data  : in  std_logic_vector(7 downto 0); -- Byte cần truyền

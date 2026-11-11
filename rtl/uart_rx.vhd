@@ -4,17 +4,17 @@
 -- Author   : FPGA Design Engineer
 -- Standard : VHDL-93 / VHDL-2008
 -- Description:
---   Khối UART Receiver (RX) chuẩn công nghiệp, điều khiển bởi máy trạng thái
---   hữu hạn (Moore FSM).
+--   Khối UART Receiver chuẩn công nghiệp, điều khiển bởi máy trạng thái
+--   hữu hạn Moore FSM.
 --
 --   Đặc tính kỹ thuật:
---   - Chuẩn truyền: 1 start bit (0), DATA_BITS (8), tùy chọn Parity, 1 stop bit (1).
---   - Lấy mẫu quá mẫu 16x (16x oversampling) với bộ chia baud tự động tính toán.
---   - Bộ đồng bộ 2 tầng D-FF chống hiện tượng bất ổn định (metastability).
---   - Bộ lọc nhiễu Start bit: kiểm tra lại mức logic tại giữa bit (tick thứ 7).
---   - Lấy mẫu chính xác giữa các bit dữ liệu và stop bit (sau mỗi 16 tick).
---   - Phát hiện lỗi khung truyền (Framing Error) và lỗi Parity.
---   - FSM kiểu Moore, viết theo phong cách rõ ràng, không sinh chốt (latch).
+--   - Chuẩn truyền: 1 start bit mức 0, DATA_BITS mặc định 8, tùy chọn Parity, 1 stop bit mức 1.
+--   - Lấy mẫu quá mức 16x với bộ chia baud tự động tính toán.
+--   - Bộ đồng bộ 2 tầng D-FF chống hiện tượng bất ổn định.
+--   - Bộ lọc nhiễu Start bit: kiểm tra lại mức logic tại giữa bit ở tick thứ 7.
+--   - Lấy mẫu chính xác giữa các bit dữ liệu và stop bit sau mỗi 16 tick.
+--   - Phát hiện lỗi khung truyền và lỗi Parity.
+--   - FSM kiểu Moore, viết theo phong cách rõ ràng, không sinh chốt.
 --------------------------------------------------------------------------------
 
 library ieee;
@@ -23,14 +23,14 @@ use ieee.numeric_std.all;
 
 entity uart_rx is
     generic (
-        CLK_FREQ    : natural := 50_000_000; -- Tần số clock hệ thống (Hz)
-        BAUD_RATE   : natural := 115_200;    -- Tốc độ baud (bps)
-        DATA_BITS   : natural := 8;          -- Số bit dữ liệu (mặc định 8)
+        CLK_FREQ    : natural := 50_000_000; -- Tần số clock hệ thống tính theo Hz
+        BAUD_RATE   : natural := 115_200;    -- Tốc độ baud tính theo bps
+        DATA_BITS   : natural := 8;          -- Số bit dữ liệu mặc định là 8
         PARITY_EN   : boolean := false;      -- Bật/tắt bit kiểm tra chẵn lẻ
-        PARITY_ODD  : boolean := false       -- false: Chẵn (Even), true: Lẻ (Odd)
+        PARITY_ODD  : boolean := false       -- false: Chẵn, true: Lẻ
     );
     port (
-        clk          : in  std_logic;        -- Clock hệ thống (50 MHz)
+        clk          : in  std_logic;        -- Clock hệ thống 50 MHz
         rst_n        : in  std_logic;        -- Reset bất đồng bộ, tích cực mức thấp
         rx           : in  std_logic;        -- Đường truyền nối tiếp UART RX bất đồng bộ
         
@@ -38,9 +38,9 @@ entity uart_rx is
         rx_data      : out std_logic_vector(DATA_BITS - 1 downto 0); -- Byte dữ liệu nhận được
         rx_done      : out std_logic;        -- Xung mức cao 1 chu kỳ clock khi nhận xong byte hợp lệ
         frame_err    : out std_logic;        -- Xung mức cao 1 chu kỳ clock khi Stop bit = '0'
-        parity_err   : out std_logic;        -- Xung mức cao 1 chu kỳ clock khi sai Parity (nếu bật)
+        parity_err   : out std_logic;        -- Xung mức cao 1 chu kỳ clock khi sai Parity
         
-        -- Tín hiệu giám sát trạng thái FSM (đưa ra LEDR[3..0] trên kit)
+        -- Tín hiệu giám sát trạng thái FSM đưa ra LEDR trên kit
         fsm_state_dbg: out std_logic_vector(3 downto 0)
     );
 end entity uart_rx;
@@ -49,19 +49,19 @@ architecture rtl of uart_rx is
 
     ----------------------------------------------------------------------------
     -- Hằng số tính toán bộ chia baud 16x
-    -- M = round(CLK_FREQ / (16 * BAUD_RATE))
+    -- Hệ số chia M = CLK_FREQ / 16 * BAUD_RATE làm tròn tới số nguyên gần nhất
     ----------------------------------------------------------------------------
     constant BAUD_DIVISOR : natural := (CLK_FREQ + (8 * BAUD_RATE)) / (16 * BAUD_RATE);
 
     ----------------------------------------------------------------------------
-    -- Khai báo kiểu trạng thái FSM (Moore)
+    -- Khai báo kiểu trạng thái FSM Moore
     ----------------------------------------------------------------------------
     type state_type is (
         S_IDLE,    -- Chờ phát hiện cạnh xuống của Start bit
-        S_START,   -- Đếm 8 ticks (tâm Start bit) và kiểm tra nhiễu
-        S_DATA,    -- Lấy mẫu 8 bit dữ liệu tại tâm mỗi bit (mỗi 16 ticks)
-        S_PARITY,  -- Lấy mẫu và kiểm tra bit Parity (nếu được bật)
-        S_STOP,    -- Lấy mẫu Stop bit tại tâm (16 ticks) và kiểm tra lỗi khung
+        S_START,   -- Đếm 8 ticks tới tâm Start bit và kiểm tra nhiễu
+        S_DATA,    -- Lấy mẫu 8 bit dữ liệu tại tâm mỗi bit sau mỗi 16 ticks
+        S_PARITY,  -- Lấy mẫu và kiểm tra bit Parity khi được bật
+        S_STOP,    -- Lấy mẫu Stop bit tại tâm sau 16 ticks và kiểm tra lỗi khung
         S_DONE     -- Phát xung rx_done trong đúng 1 chu kỳ clock
     );
 
@@ -115,7 +115,7 @@ begin
 
     ----------------------------------------------------------------------------
     -- 1. BỘ ĐỒNG BỘ 2 TẦNG D-FF VÀ PHÁT HIỆN CẠNH XUỐNG
-    -- Chống hiện tượng bất ổn định (Metastability) từ đường truyền rx bên ngoài.
+    -- Chống hiện tượng bất ổn định từ đường truyền rx bên ngoài.
     ----------------------------------------------------------------------------
     process(clk, rst_n)
     begin
@@ -134,7 +134,7 @@ begin
     rx_falling_edge <= '1' when (rx_prev = '1' and rx_sync = '0') else '0';
 
     ----------------------------------------------------------------------------
-    -- 2. BỘ PHÁT XUNG BAUD TICK 16X (Baud Rate Generator)
+    -- 2. BỘ PHÁT XUNG BAUD TICK 16X
     -- Tạo xung baud_tick_16x có độ rộng 1 chu kỳ clock hệ thống.
     -- Khi FSM ở S_IDLE và bắt được cạnh xuống, bộ đếm được reset về 0 để đồng pha.
     ----------------------------------------------------------------------------
@@ -159,7 +159,7 @@ begin
     end process;
 
     ----------------------------------------------------------------------------
-    -- 3. THANH GHI TRẠNG THÁI VÀ DỮ LIỆU ĐỒNG BỘ (Synchronous Process)
+    -- 3. THANH GHI TRẠNG THÁI VÀ DỮ LIỆU ĐỒNG BỘ
     ----------------------------------------------------------------------------
     process(clk, rst_n)
     begin
@@ -187,7 +187,7 @@ begin
     end process;
 
     ----------------------------------------------------------------------------
-    -- 4. LOGIC CHUYỂN TRẠNG THÁI TỔ HỢP (Next-State & Datapath Combinational)
+    -- 4. LOGIC CHUYỂN TRẠNG THÁI TỔ HỢP
     -- Thiết kế chuẩn Moore, gán giá trị mặc định tránh hoàn toàn sinh latch.
     ----------------------------------------------------------------------------
     parity_calc <= compute_parity(data_reg, PARITY_ODD);
@@ -206,7 +206,7 @@ begin
         case state_reg is
 
             --------------------------------------------------------------------
-            -- S_IDLE: Đường truyền rỗi (mức '1'). Chờ cạnh xuống Start bit.
+            -- S_IDLE: Đường truyền rỗi ở mức '1'. Chờ cạnh xuống Start bit.
             --------------------------------------------------------------------
             when S_IDLE =>
                 tick_cnt_next <= 0;
@@ -216,7 +216,7 @@ begin
                 end if;
 
             --------------------------------------------------------------------
-            -- S_START: Chờ 8 ticks (tâm Start bit). Kiểm tra Start bit còn là 0.
+            -- S_START: Chờ 8 ticks tới tâm Start bit. Kiểm tra Start bit còn là 0.
             --------------------------------------------------------------------
             when S_START =>
                 if baud_tick_16x = '1' then
@@ -228,7 +228,7 @@ begin
                             bit_cnt_next  <= 0;
                             state_next    <= S_DATA;
                         else
-                            -- Nhiễu (Glitch), Start bit không giữ mức 0 -> quay về IDLE
+                            -- Nhiễu gai, Start bit không giữ mức 0 -> quay về IDLE
                             state_next <= S_IDLE;
                         end if;
                     else
@@ -244,7 +244,7 @@ begin
                     if tick_cnt_reg = 15 then
                         -- Đúng tâm bit dữ liệu: lấy mẫu rx_sync
                         tick_cnt_next <= 0;
-                        data_next(bit_cnt_reg) <= rx_sync; -- LSB trước (bit 0 đến 7)
+                        data_next(bit_cnt_reg) <= rx_sync; -- Nhận LSB trước từ bit 0 đến 7
 
                         if bit_cnt_reg = DATA_BITS - 1 then
                             if PARITY_EN then
@@ -261,7 +261,7 @@ begin
                 end if;
 
             --------------------------------------------------------------------
-            -- S_PARITY: Lấy mẫu bit kiểm tra chẵn lẻ tại tâm (16 ticks)
+            -- S_PARITY: Lấy mẫu bit kiểm tra chẵn lẻ tại tâm sau 16 ticks
             --------------------------------------------------------------------
             when S_PARITY =>
                 if baud_tick_16x = '1' then
@@ -277,7 +277,7 @@ begin
                 end if;
 
             --------------------------------------------------------------------
-            -- S_STOP: Lấy mẫu Stop bit tại tâm (16 ticks). Stop bit bắt buộc = '1'.
+            -- S_STOP: Lấy mẫu Stop bit tại tâm sau 16 ticks. Stop bit bắt buộc = '1'.
             --------------------------------------------------------------------
             when S_STOP =>
                 if baud_tick_16x = '1' then
@@ -287,7 +287,7 @@ begin
                             -- Stop bit hợp lệ -> chuyển sang S_DONE
                             state_next <= S_DONE;
                         else
-                            -- Lỗi khung truyền (Framing Error: Stop bit = '0')
+                            -- Lỗi khung truyền khi Stop bit = '0'
                             frame_err_next <= '1';
                             state_next     <= S_IDLE;
                         end if;
@@ -309,15 +309,15 @@ begin
     end process;
 
     ----------------------------------------------------------------------------
-    -- 5. ĐẦU RA FSM THEO CHUẨN MOORE (Outputs depend solely on current state)
+    -- 5. ĐẦU RA FSM THEO CHUẨN MOORE
     ----------------------------------------------------------------------------
-    -- rx_done chỉ kích hoạt mức cao khi đang ở trạng thái S_DONE (rộng 1 clock)
+    -- rx_done chỉ kích hoạt mức cao khi đang ở trạng thái S_DONE trong 1 chu kỳ clock
     rx_done    <= '1' when (state_reg = S_DONE) else '0';
     rx_data    <= rx_data_reg;
     frame_err  <= frame_err_reg;
     parity_err <= parity_err_reg;
 
-    -- Mã hóa trạng thái FSM dạng nhị phân 4-bit đưa ra LEDR[3..0]
+    -- Mã hóa trạng thái FSM dạng nhị phân 4-bit đưa ra LEDR
     process(state_reg)
     begin
         case state_reg is

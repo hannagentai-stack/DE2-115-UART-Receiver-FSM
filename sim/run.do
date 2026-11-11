@@ -11,7 +11,7 @@ if [file exists work] {
 vlib work
 vmap work work
 
-# 2. Bien dich cac file thiet ke VHDL (-2008)
+# 2. Bien dich cac file thiet ke VHDL chuẩn 2008
 puts ">>> Dang bien dich cac file RTL..."
 vcom -2008 -work work ../rtl/uart_rx.vhd
 vcom -2008 -work work tb_uart_rx.vhd
@@ -32,15 +32,15 @@ add wave -color "Cyan"   -label "RX_SERIAL"       sim:/tb_uart_rx/rx
 add wave -color "Orange" -label "RX_SYNC"         sim:/tb_uart_rx/dut/rx_sync
 add wave -color "White"  -label "FALLING_EDGE"    sim:/tb_uart_rx/dut/rx_falling_edge
 
-add wave -divider "BO CHIA BAUD (OVERSAMPLING 16X)"
+add wave -divider "BO CHIA BAUD OVERSAMPLING 16X"
 add wave -color "Magenta" -label "BAUD_TICK_16X"  sim:/tb_uart_rx/dut/baud_tick_16x
 add wave -radix unsigned -label "BAUD_DIV_CNT"    sim:/tb_uart_rx/dut/baud_counter
-add wave -radix unsigned -label "TICK_CNT (0..15)" sim:/tb_uart_rx/dut/tick_cnt_reg
+add wave -radix unsigned -label "TICK_CNT"        sim:/tb_uart_rx/dut/tick_cnt_reg
 
 add wave -divider "FSM RECEIVER MOORE"
 add wave -color "Green"  -radix ASCII -label "FSM_STATE" sim:/tb_uart_rx/dut/state_reg
 add wave -radix binary   -label "FSM_DBG_LEDR"   sim:/tb_uart_rx/fsm_state_dbg
-add wave -radix unsigned -label "BIT_CNT (0..7)"  sim:/tb_uart_rx/dut/bit_cnt_reg
+add wave -radix unsigned -label "BIT_CNT"         sim:/tb_uart_rx/dut/bit_cnt_reg
 add wave -radix hex      -label "SHIFT_REG"       sim:/tb_uart_rx/dut/data_reg
 
 add wave -divider "DAU RA DULIEU VA CO TRANG THAI"

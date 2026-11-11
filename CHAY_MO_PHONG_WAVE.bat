@@ -5,7 +5,7 @@ title Khởi chạy mô phỏng ModelSim UART Receiver Waveform
 
 echo ===============================================================================
 echo     ĐỒ ÁN: THIẾT KẾ UART RECEIVER SỬ DỤNG FSM - KIT DE2-115
-echo     Đang khởi chạy ModelSim, tự động nạp tín hiệu và vẽ dạng sóng ^(Waveform^)...
+echo     Đang khởi chạy ModelSim, tự động nạp tín hiệu và vẽ dạng sóng...
 echo ===============================================================================
 
 if not exist "%~dp0sim\run.do" (
@@ -18,7 +18,7 @@ cd /d "%~dp0sim"
 
 set "MODELSIM_BIN="
 
-:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR (tự động tạo khi cài Quartus)
+:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR
 if defined QUARTUS_ROOTDIR (
     for %%P in (
         "%QUARTUS_ROOTDIR%\..\modelsim_ase\win32aloem\vsim.exe"
@@ -37,7 +37,7 @@ if not defined MODELSIM_BIN (
     )
 )
 
-:: 3. Kiểm tra đường dẫn mặc định phổ biến (20.1)
+:: 3. Kiểm tra đường dẫn mặc định phổ biến 20.1
 if not defined MODELSIM_BIN (
     if exist "C:\intelFPGA_lite\20.1\modelsim_ase\win32aloem\vsim.exe" (
         set "MODELSIM_BIN=C:\intelFPGA_lite\20.1\modelsim_ase\win32aloem\vsim.exe"
@@ -68,7 +68,7 @@ if defined MODELSIM_BIN (
     start "" "!MODELSIM_BIN!" -gui -do "run.do"
     echo [OK] Đã kích hoạt ModelSim thành công!
 ) else (
-    echo [CẢNH BÁO] Không tìm thấy đường dẫn cài đặt ModelSim ^(vsim.exe^) trên máy.
+    echo [CẢNH BÁO] Không tìm thấy đường dẫn cài đặt ModelSim vsim.exe trên máy.
     echo [*] Đang thử gọi trực tiếp vsim từ hệ thống...
     start "" vsim -gui -do "run.do"
 )

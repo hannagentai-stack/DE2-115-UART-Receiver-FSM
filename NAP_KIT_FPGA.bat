@@ -18,7 +18,7 @@ if not exist "%SOF_FILE%" (
     exit /b 1
 )
 
-:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR (tự động tạo khi cài Quartus)
+:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR
 if defined QUARTUS_ROOTDIR (
     for %%P in (
         "%QUARTUS_ROOTDIR%\bin64\quartus_pgm.exe"
@@ -50,7 +50,7 @@ if not defined QUARTUS_BIN (
     )
 )
 
-:: 3. Kiểm tra đường dẫn mặc định phổ biến (20.1)
+:: 3. Kiểm tra đường dẫn mặc định phổ biến 20.1
 if not defined PGM_EXE (
     if exist "C:\intelFPGA_lite\20.1\quartus\bin64\quartus_pgm.exe" (
         set "PGM_EXE=C:\intelFPGA_lite\20.1\quartus\bin64\quartus_pgm.exe"
@@ -104,7 +104,7 @@ if defined PGM_EXE (
 )
 
 echo.
-echo [THÔNG BÁO] Không thể nạp trực tiếp qua dòng lệnh ^(kiểm tra cáp USB-Blaster / nguồn 12V^).
+echo [THÔNG BÁO] Không thể nạp trực tiếp qua dòng lệnh, hãy kiểm tra cáp USB-Blaster và nguồn 12V.
 if defined QUARTUS_BIN (
     echo Đang mở giao diện đồ họa Quartus Programmer: "!QUARTUS_BIN!"
     start "" "!QUARTUS_BIN!" --pgm
@@ -119,7 +119,7 @@ echo.
 echo ===============================================================================
 echo [THÀNH CÔNG] ĐÃ NẠP XONG 100%% VÀO KIT DE2-115!
 echo - Chế độ On-Board Test: Gạt SW[17] lên '1', chỉnh SW[7..0], nhấn KEY[2] để test.
-echo - Chế độ PC ngoài: Gạt SW[17] xuống '0', kết nối cáp DB9 ^(115200 8N1^).
+echo - Chế độ PC ngoài: Gạt SW[17] xuống '0', kết nối cáp DB9 tốc độ 115200 8N1.
 echo ===============================================================================
 pause
 exit /b 0

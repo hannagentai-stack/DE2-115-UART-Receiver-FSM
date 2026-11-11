@@ -10,7 +10,7 @@ echo ===========================================================================
 set "QPF_FILE=%~dp0DE2_115_UART_RX.qpf"
 set "QUARTUS_BIN="
 
-:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR (tự động tạo khi cài Quartus)
+:: 1. Dò tìm qua biến môi trường QUARTUS_ROOTDIR
 if defined QUARTUS_ROOTDIR (
     for %%P in (
         "%QUARTUS_ROOTDIR%\bin64\quartus.exe"
@@ -29,7 +29,7 @@ if not defined QUARTUS_BIN (
     )
 )
 
-:: 3. Kiểm tra đường dẫn mặc định phổ biến (20.1)
+:: 3. Kiểm tra đường dẫn mặc định phổ biến 20.1
 if not defined QUARTUS_BIN (
     if exist "C:\intelFPGA_lite\20.1\quartus\bin64\quartus.exe" (
         set "QUARTUS_BIN=C:\intelFPGA_lite\20.1\quartus\bin64\quartus.exe"

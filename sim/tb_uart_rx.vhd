@@ -4,13 +4,13 @@
 -- Author   : FPGA Design Engineer
 -- Standard : VHDL-93 / VHDL-2008
 -- Description:
---   Testbench tu kiem tra (Self-checking Testbench) cho khoi uart_rx:
+--   Testbench tu kiem tra cho khoi uart_rx:
 --   1. Tao clock 50 MHz va chuoi reset ban dau.
---   2. Procedure phat khung UART chuan (Start + 8 Data LSB first + Stop).
+--   2. Procedure phat khung UART chuan: Start + 8 Data LSB first + Stop.
 --   3. Kich ban 1: Gui lan luot cac byte chuan 0x55, 0xAA, 0x00, 0xFF, 0x3C.
---   4. Kich ban 2: Gui 2 byte lien tiep khong co khoang nghi (Back-to-Back).
---   5. Kich ban 3: Gui Stop bit sai (Stop = '0') -> kiem tra frame_err va chan rx_done.
---   6. Kich ban 4: Xung nhieu nhon (Glitch < 8 ticks) -> kiem tra bo loc nhieu.
+--   4. Kich ban 2: Gui 2 byte lien tiep khong co khoang nghi.
+--   5. Kich ban 3: Gui Stop bit sai o muc '0' -> kiem tra frame_err va chan rx_done.
+--   6. Kich ban 4: Xung nhieu nhon nho hon 8 ticks -> kiem tra bo loc nhieu.
 --   7. Kich ban 5: Reset bat dong bo giua chung khi dang nhan du lieu.
 --   8. Co che monitor bat xung dong bo, khong bi race condition.
 --   9. Tu dong dung mo phong khi hoan tat tat ca kich ban.
@@ -65,11 +65,11 @@ architecture sim of tb_uart_rx is
         constant stop_bit : in  std_logic := '1'
     ) is
     begin
-        -- 1. Start bit ('0')
+        -- 1. Start bit muc '0'
         serial_out <= '0';
         wait for bit_time;
 
-        -- 2. 8 bit du lieu (LSB truoc)
+        -- 2. 8 bit du lieu, truyen LSB truoc
         for i in 0 to 7 loop
             serial_out <= data_in(i);
             wait for bit_time;
@@ -105,7 +105,7 @@ begin
         );
 
     ----------------------------------------------------------------------------
-    -- 2. TAO CLOCK 50 MHz (Tu dong dung khi sim_done = true)
+    -- 2. TAO CLOCK 50 MHz, TU DONG DUNG KHI sim_done = true
     ----------------------------------------------------------------------------
     clk_process : process
     begin
@@ -163,7 +163,7 @@ begin
         wait for 200 ns;
 
         ------------------------------------------------------------------------
-        -- KICH BAN 1: Gui cac byte don le (0x55, 0xAA, 0x00, 0xFF, 0x3C)
+        -- KICH BAN 1: Gui cac byte don le 0x55, 0xAA, 0x00, 0xFF, 0x3C
         ------------------------------------------------------------------------
         report "--- [KICH BAN 1] Kiem tra truyen cac byte don le ---";
         for i in test_bytes'range loop
@@ -198,26 +198,26 @@ begin
         end loop;
 
         ------------------------------------------------------------------------
-        -- KICH BAN 2: Gui 2 byte lien tiep khong khoang nghi (Back-to-Back)
+        -- KICH BAN 2: Gui 2 byte lien tiep khong khoang nghi
         ------------------------------------------------------------------------
-        report "--- [KICH BAN 2] Kiem tra Back-to-Back: 0x12 noi tiep 0x34 ---";
+        report "--- [KICH BAN 2] Kiem tra truyen lien tiep: 0x12 noi tiep 0x34 ---";
         clear_latches <= '1';
         wait for CLK_PERIOD;
         clear_latches <= '0';
         wait for CLK_PERIOD;
 
-        -- Gui byte 1 (0x12)
+        -- Gui byte 1 la 0x12
         uart_send_byte(rx, x"12", BAUD_PERIOD, '1');
         assert rx_done_latched = '1' and rx_data_latched = x"12"
-            report "[FAIL] Kich ban 2 (Byte 1): Khong nhan dung 0x12"
+            report "[FAIL] Kich ban 2 - Byte 1: Khong nhan dung 0x12"
             severity error;
         if rx_done_latched = '1' and rx_data_latched = x"12" then
-            report "  => [PASS] Byte 1 (0x12) hop le";
+            report "  => [PASS] Byte 1 0x12 hop le";
         else
             sim_error_cnt <= sim_error_cnt + 1;
         end if;
 
-        -- Xoa chot va gui ngay byte 2 (0x34) khong nghi
+        -- Xoa chot va gui ngay byte 2 la 0x34 khong nghi
         clear_latches <= '1';
         wait for CLK_PERIOD;
         clear_latches <= '0';
@@ -225,10 +225,10 @@ begin
 
         uart_send_byte(rx, x"34", BAUD_PERIOD, '1');
         assert rx_done_latched = '1' and rx_data_latched = x"34"
-            report "[FAIL] Kich ban 2 (Byte 2): Khong nhan dung 0x34"
+            report "[FAIL] Kich ban 2 - Byte 2: Khong nhan dung 0x34"
             severity error;
         if rx_done_latched = '1' and rx_data_latched = x"34" then
-            report "  => [PASS] Byte 2 (0x34) hop le (Back-to-Back hoat dong hoan hao)";
+            report "  => [PASS] Byte 2 0x34 hop le, truyen lien tiep hoat dong hoan hao";
         else
             sim_error_cnt <= sim_error_cnt + 1;
         end if;
@@ -236,9 +236,9 @@ begin
         wait for 2 * BAUD_PERIOD;
 
         ------------------------------------------------------------------------
-        -- KICH BAN 3: Stop bit sai (Stop = '0') -> Kiem tra Framing Error
+        -- KICH BAN 3: Stop bit sai o muc '0' -> Kiem tra Framing Error
         ------------------------------------------------------------------------
-        report "--- [KICH BAN 3] Kiem tra Framing Error (Stop bit = '0') ---";
+        report "--- [KICH BAN 3] Kiem tra Framing Error khi Stop bit = '0' ---";
         clear_latches <= '1';
         wait for CLK_PERIOD;
         clear_latches <= '0';
@@ -265,15 +265,15 @@ begin
         wait for 2 * BAUD_PERIOD;
 
         ------------------------------------------------------------------------
-        -- KICH BAN 4: Xung nhieu ngan (< 8 ticks) -> Bo loc nhieu
+        -- KICH BAN 4: Xung nhieu ngan nho hon 8 ticks -> Bo loc nhieu
         ------------------------------------------------------------------------
-        report "--- [KICH BAN 4] Kiem tra bo loc nhieu Start bit (Glitch rejection) ---";
+        report "--- [KICH BAN 4] Kiem tra bo loc nhieu Start bit ---";
         clear_latches <= '1';
         wait for CLK_PERIOD;
         clear_latches <= '0';
         wait for CLK_PERIOD;
 
-        report "Tao xung nhieu muc '0' rong 3 ticks (~1.6 us < 8 ticks)...";
+        report "Tao xung nhieu muc '0' rong 3 ticks ~ 1.6 us...";
         rx <= '0';
         wait for 3 * (BAUD_PERIOD / 16);
         rx <= '1';
@@ -334,9 +334,9 @@ begin
         ------------------------------------------------------------------------
         report "==========================================================";
         if sim_error_cnt = 0 then
-            report ">>> KET QUA: TAT CA KICH BAN DEU PASS (ALL TESTS PASSED) <<<";
+            report ">>> KET QUA: TAT CA KICH BAN DEU PASS <<<";
         else
-            report ">>> KET QUA: CO " & integer'image(sim_error_cnt) & " LOI (FAILED) <<<";
+            report ">>> KET QUA: CO " & integer'image(sim_error_cnt) & " LOI <<<";
         end if;
         report "==========================================================";
 

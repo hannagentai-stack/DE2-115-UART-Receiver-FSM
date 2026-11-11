@@ -40,8 +40,8 @@ Thiết kế đã được tích hợp sẵn **2 chế độ hoạt động**:
 
 1. Cấp nguồn adapter 12V DC cho kit DE2-115 và bật công tắc đỏ `POWER`.
 2. Cắm cáp nạp **USB-Blaster** từ kit sang cổng USB máy tính.
-3. Trong thư mục dự án, nhấp đúp chuột chạy file:
-   👉 **`NAP_KIT_FPGA.bat`**
+3. Trong thư mục gốc của dự án, nhấp đúp chuột chạy file:
+   👉 **[`NAP_KIT_FPGA.bat`](../NAP_KIT_FPGA.bat)**
 4. Khi cửa sổ dòng lệnh báo `[THÀNH CÔNG] ĐÃ NẠP XONG 100% VÀO KIT DE2-115!`, kit đã sẵn sàng hoạt động!
 
 ---

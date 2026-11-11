@@ -80,9 +80,9 @@ Trong tab **`Serial`** của phần mềm Hercules, nhìn sang cột **Serial** 
 ## PHẦN IV. KỊCH BẢN THỰC HÀNH & BIỂU DIỄN (DEMO) VỚI KIT DE2-115
 
 ### Bước chuẩn bị trên Kit FPGA DE2-115
-1. Đảm bảo đã chạy file [`NAP_KIT_FPGA.bat`](file:///c:/Users/handa/OneDrive/Documents/Projects/UART/NAP_KIT_FPGA.bat) để nạp mạch vào Kit.
+1. Đảm bảo đã chạy file [`NAP_KIT_FPGA.bat`](../NAP_KIT_FPGA.bat) để nạp mạch vào Kit.
 2. **Gạt công tắc `SW[17]` xuống mức `0`** (gạt về phía dưới).
-   - **Kiểm tra:** Đèn đỏ `LEDR[17]` phải **TẮT**. Lúc này bộ chọn kênh (MUX) trong [`uart_rx_top.vhd`](file:///c:/Users/handa/OneDrive/Documents/Projects/UART/rtl/uart_rx_top.vhd) đã ngắt bộ phát nội bộ và nối thẳng đầu vào bộ thu vào chân vật lý **`UART_RXD` (Pin `G12`)** nhận tín hiệu từ Laptop.
+   - **Kiểm tra:** Đèn đỏ `LEDR[17]` phải **TẮT**. Lúc này bộ chọn kênh (MUX) trong [`uart_rx_top.vhd`](../rtl/uart_rx_top.vhd) đã ngắt bộ phát nội bộ và nối thẳng đầu vào bộ thu vào chân vật lý **`UART_RXD` (Pin `G12`)** nhận tín hiệu từ Laptop.
 3. Nhấn nút **`KEY[0]`** (nút ngoài cùng bên phải) 1 lần để Reset toàn bộ thanh ghi về `00`.
 
 ---
@@ -95,7 +95,7 @@ Trong tab **`Serial`** của phần mềm Hercules, nhìn sang cột **Serial** 
 2. **Hiện tượng quan sát trên Kit DE2-115:**
    - **LED 7 đoạn `HEX1:HEX0`:** Lập tức hiển thị số **`41`** (mã ASCII hệ Hex của chữ `'A'` là `0x41`).
    - **Dãy LED đỏ `LEDR[7..0]`:** Sáng đúng mã nhị phân `0100 0001` (`LEDR[6]` và `LEDR[0]` sáng, các đèn còn lại tắt).
-   - **Đèn báo nhận `LEDR[8]`:** Chớp sáng rõ ràng trong **100 ms** (nhờ mạch kéo giãn xung [`pulse_stretcher.vhd`](file:///c:/Users/handa/OneDrive/Documents/Projects/UART/rtl/pulse_stretcher.vhd)) rồi tắt.
+   - **Đèn báo nhận `LEDR[8]`:** Chớp sáng rõ ràng trong **100 ms** (nhờ mạch kéo giãn xung [`pulse_stretcher.vhd`](../rtl/pulse_stretcher.vhd)) rồi tắt.
 3. **Hiện tượng quan sát trên màn hình Hercules (Laptop):**
    - Ngay khi mạch FPGA nhận xong chữ `'A'` (`rx_done_tick = '1'`), khối `uart_tx` trên FPGA được kích hoạt tự động **Echo (phản hồi ngược)** byte `0x41` qua chân `UART_TXD` (Pin `G9`) trả về Laptop.
    - Trên màn hình Hercules xuất hiện ký tự **`A`** (hoặc `{41}` nếu bật chế độ xem Hex).
@@ -141,7 +141,7 @@ Một số giá trị biên như `0xFF` (`1111 1111b` — tất cả các bit b�
    - Nhấn nút **`Open`** để mở lại cổng COM ở tốc độ sai lệch (`9600 bps`).
    - Tại ô `Send` phía dưới (đang tích chọn `HEX`), nhập **`00`** (hoặc gõ phím bất kỳ trên bàn phím) rồi nhấn **`Send`**.
 2. **Hiện tượng quan sát trên Kit DE2-115:**
-   - Đèn đỏ **`LEDR[9]` (Framing Error Flag)** lập tức **BẬT SÁNG** và giữ nguyên trạng thái sáng (nhờ mạch chốt cờ lỗi `err_latch_reg` trong [`uart_rx_top.vhd`](file:///c:/Users/handa/OneDrive/Documents/Projects/UART/rtl/uart_rx_top.vhd)).
+   - Đèn đỏ **`LEDR[9]` (Framing Error Flag)** lập tức **BẬT SÁNG** và giữ nguyên trạng thái sáng (nhờ mạch chốt cờ lỗi `err_latch_reg` trong [`uart_rx_top.vhd`](../rtl/uart_rx_top.vhd)).
    - Đồng thời, dữ liệu bị lỗi sẽ **không** được phép ghi đè vào thanh ghi hiển thị `HEX1:HEX0` (bảo toàn dữ liệu hợp lệ trước đó).
 3. **Giải thích nguyên lý (Dùng khi trả lời câu hỏi của giảng viên):**
    - Bộ thu FPGA đang lấy mẫu ở tốc độ `115200 bps` (chu kỳ mỗi bit là $8.68\ \mu\text{s}$).

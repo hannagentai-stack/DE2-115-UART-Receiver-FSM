@@ -770,9 +770,10 @@ def build_docx_from_markdown(md_text, docx_path):
     print(f"SUCCESS: Generated {docx_path}")
 
 if __name__ == '__main__':
-    project_dir = r"c:\Users\handa\OneDrive\Documents\Projects\UART"
-    md_file = os.path.join(project_dir, "NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md")
-    docx_file = os.path.join(project_dir, "NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx")
+    project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    docs_dir = os.path.join(project_dir, "docs")
+    md_file = os.path.join(docs_dir, "NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md")
+    docx_file = os.path.join(docs_dir, "NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx")
 
     # Ghi file Markdown
     with open(md_file, "w", encoding="utf-8") as f:

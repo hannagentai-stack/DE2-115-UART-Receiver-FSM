@@ -423,6 +423,7 @@ if __name__ == '__main__':
         md_file = sys.argv[1]
         docx_file = sys.argv[2]
     else:
-        md_file = r"c:\Users\handa\OneDrive\Documents\Projects\UART\BAO_CAO_DO_AN_UART_RECEIVER.md"
-        docx_file = r"c:\Users\handa\OneDrive\Documents\Projects\UART\BAO_CAO_DO_AN_UART_RECEIVER.docx"
+        docs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
+        md_file = os.path.join(docs_dir, "BAO_CAO_DO_AN_UART_RECEIVER.md")
+        docx_file = os.path.join(docs_dir, "BAO_CAO_DO_AN_UART_RECEIVER.docx")
     build_docx(md_file, docx_file)

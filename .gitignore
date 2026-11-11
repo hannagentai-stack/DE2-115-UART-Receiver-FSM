@@ -1,15 +1,18 @@
-# Quartus internal build databases
+# Quartus internal build databases & temp files
 db/
 incremental_db/
-synth/db/
-synth/incremental_db/
-synth/output_files/
 *.qws
 *.bak
 *.orig
 
+# Quartus output files (keep only bitstream .sof and programmer config .cdf)
+output_files/*
+!output_files/*.sof
+!output_files/*.cdf
+
 # ModelSim generated files
 sim/work/
+*.wlf
 sim/vsim.wlf
 sim/transcript
 sim/modelsim.ini
@@ -18,7 +21,7 @@ sim/modelsim.ini
 __pycache__/
 *.pyc
 
-# OS files
+# Office & OS temporary files
+~$*.docx
 .DS_Store
 Thumbs.db
-~$*.docx

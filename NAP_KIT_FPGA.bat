@@ -6,9 +6,6 @@ echo     ĐỒ ÁN: UART RECEIVER FSM - NẠP BITSTREAM VÀO KIT DE2-115
 echo ===============================================================================
 
 set "SOF_FILE=%~dp0output_files\DE2_115_UART_RX.sof"
-if not exist "%SOF_FILE%" (
-    set "SOF_FILE=%~dp0synth\output_files\DE2_115_UART_RX.sof"
-)
 
 set "PGM_EXE=C:\intelFPGA_lite\20.1\quartus\bin64\quartus_pgm.exe"
 

@@ -119,7 +119,8 @@ UART/
 │   ├── NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.docx    # Tài liệu phân tích chuyên sâu nguyên lý, sơ đồ khối & Timing
 │   ├── GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx      # Giải thích chi tiết từng dòng mã VHDL của toàn bộ 5 module
 │   ├── HUONG_DAN_TEST_KIT_CHI_TIET.docx             # Hướng dẫn vận hành và kiểm thử thực tế 2 chế độ trên Kit DE2-115
-│   └── HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx   # Hướng dẫn cài đặt và dùng phần mềm Hercules kết nối Laptop ↔ FPGA
+│   ├── HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx   # Hướng dẫn cài đặt và dùng phần mềm Hercules kết nối Laptop ↔ FPGA
+│   └── HUONG_DAN_TAI_VA_CHAY_DU_AN_TU_GITHUB.docx   # Hướng dẫn tải dự án từ GitHub (ZIP/Clone) và chạy 1-Click trên máy khác
 ├── output_files/                                    # Kết quả tổng hợp & Bitstream nạp mạch FPGA
 │   ├── DE2_115_UART_RX.sof                          # File cấu hình SRAM Object File sẵn sàng nạp xuống Kit DE2-115
 │   └── DE2_115_UART_RX.cdf                          # Cấu hình Chain Description File cho Quartus Programmer
@@ -145,10 +146,35 @@ Toàn bộ tài liệu học thuật, giải thích mã nguồn và hướng d�
 | **3** | **Giải thích Chi tiết Từng Dòng Code VHDL** | Giải thích cặn kẽ từng khối lệnh VHDL của cả 5 file trong `rtl/` (`uart_rx_top`, `uart_rx`, `uart_tx`, `hex_to_7seg`, `pulse_stretcher`). | [`docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx`](docs/GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.docx) |
 | **4** | **Hướng dẫn Kiểm thử Thực tế trên Kit DE2-115** | Bảng tra cứu nhanh nút nhấn `KEY`, công tắc `SW`, đèn `LEDR`/`HEX` và các kịch bản kiểm thử từng bước cho cả chế độ On-Board Test và chế độ PC. | [`docs/HUONG_DAN_TEST_KIT_CHI_TIET.docx`](docs/HUONG_DAN_TEST_KIT_CHI_TIET.docx) |
 | **5** | **Hướng dẫn Cài đặt & Sử dụng Hercules** | Hướng dẫn kiểm tra cổng `COM`, cấu hình phần mềm Hercules (`115200, 8N1`), truyền ký tự ASCII/Hex và biểu diễn tính năng phát hiện lỗi khung (`Framing Error`). | [`docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx`](docs/HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.docx) |
+| **6** | **Hướng dẫn Tải & Khởi chạy Dự án từ GitHub** | Hướng dẫn chi tiết 2 cách tải dự án (`Download ZIP` / `git clone`), lưu ý giải nén, xử lý Windows SmartScreen và khởi chạy 1-Click trên mọi máy tính. | [`docs/HUONG_DAN_TAI_VA_CHAY_DU_AN_TU_GITHUB.docx`](docs/HUONG_DAN_TAI_VA_CHAY_DU_AN_TU_GITHUB.docx) |
 
 ---
 
-## 5. Hướng dẫn nhanh 3 bước (Quick Start)
+## 5. Hướng dẫn sử dụng & Khởi chạy nhanh (Quick Start)
+
+### Hướng dẫn tải dự án về máy tính (Clone / Download ZIP)
+
+Dự án đã tích hợp sẵn cơ chế **tự động nhận diện đường dẫn Quartus/ModelSim đa phiên bản trên mọi ổ đĩa (`C:`, `D:`, `E:`)** và đính kèm sẵn file nạp [`output_files/DE2_115_UART_RX.sof`](output_files/DE2_115_UART_RX.sof). Bạn có thể tải về bất kỳ máy tính nào và chạy ngay theo **1 trong 2 cách** dưới đây *(xem bản Word chi tiết tại [`docs/HUONG_DAN_TAI_VA_CHAY_DU_AN_TU_GITHUB.docx`](docs/HUONG_DAN_TAI_VA_CHAY_DU_AN_TU_GITHUB.docx))*:
+
+- **Cách 1 — Tải trực tiếp file nén `.ZIP` trên trình duyệt web** *(Khuyên dùng cho máy phòng thực hành / máy không cài Git)*:
+  1. Truy cập `https://github.com/hannagentai-stack/DE2-115-UART-Receiver-FSM`.
+  2. Nhấn nút màu xanh lá **`<> Code`** $\rightarrow$ Chọn **`Download ZIP`**.
+  3. Bấm chuột phải vào file `DE2-115-UART-Receiver-FSM-main.zip` vừa tải về $\rightarrow$ Chọn **`Extract All...`** (hoặc `Extract Here` bằng WinRAR / 7-Zip).
+  4. > **Lưu ý cực kỳ quan trọng:** Bắt buộc phải **Giải nén (Extract)** ra thư mục thường trước khi bấm chạy các file `.bat` *(tuyệt đối không nhấp đúp chạy `.bat` trực tiếp bên trong cửa sổ xem trước của WinRAR/ZIP)*. Nên đặt thư mục ở đường dẫn ngắn gọn, không dấu tiếng Việt (ví dụ: `D:\DE2-115-UART-Receiver-FSM\`).
+
+- **Cách 2 — Tải bằng lệnh `git clone`** *(Dành cho máy đã cài Git / VS Code)*:
+  - Mở Terminal / PowerShell / Git Bash và chạy:
+    ```bash
+    git clone https://github.com/hannagentai-stack/DE2-115-UART-Receiver-FSM.git
+    cd DE2-115-UART-Receiver-FSM
+    ```
+  - Để cập nhật phiên bản mới nhất khi đã có sẵn thư mục dự án trên máy:
+    ```bash
+    git pull origin main
+    ```
+
+- **Mẹo xử lý thông báo Windows SmartScreen khi mới tải file `.bat` từ Internet về:**
+  - Nếu Windows hiện bảng màu xanh *"Windows protected your PC"*, nhấn vào dòng chữ **`More info`** $\rightarrow$ nhấn nút **`Run anyway`** (hoặc chuột phải vào file `.bat` / `.zip` $\rightarrow$ `Properties` $\rightarrow$ tích chọn **`Unblock`** $\rightarrow$ `OK`).
 
 ### Bước 1: Chạy mô phỏng kiểm chứng dạng sóng trên ModelSim
 Nhấp đúp vào file [`CHAY_MO_PHONG_WAVE.bat`](CHAY_MO_PHONG_WAVE.bat) ở thư mục gốc. Script sẽ tự động gọi ModelSim, biên dịch toàn bộ các module trong [`rtl/`](rtl/) cùng [`sim/tb_uart_rx.vhd`](sim/tb_uart_rx.vhd) theo kịch bản [`sim/run.do`](sim/run.do) và mở cửa sổ Waveform kiểm chứng tự động **5 kịch bản biên**:

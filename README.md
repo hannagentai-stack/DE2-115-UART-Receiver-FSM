@@ -44,7 +44,8 @@ UART/
 ├── BAO_CAO_DO_AN_UART_RECEIVER.docx          # Báo cáo đồ án chi tiết (Word)
 ├── NGUYEN_LY_HOAT_DONG_VA_SO_DO_UART_RX.md   # Tài liệu nguyên lý hoạt động & sơ đồ khối/FSM
 ├── GIAI_THICH_CHI_TIET_TUNG_DONG_CODE.md     # Giải thích chi tiết từng dòng mã VHDL
-└── HUONG_DAN_TEST_KIT_CHI_TIET.md            # Hướng dẫn vận hành và kiểm thử thực tế trên Kit
+├── HUONG_DAN_TEST_KIT_CHI_TIET.md            # Hướng dẫn vận hành và kiểm thử thực tế trên Kit
+└── HUONG_DAN_CAI_DAT_VA_SU_DUNG_HERCULES.md  # Hướng dẫn cài đặt và dùng app Hercules kết nối Laptop ↔ FPGA
 ```
 
 ---

@@ -1,0 +1,185 @@
+# ==============================================================================
+# Quartus Prime Settings File (.qsf)
+# Project  : DE2_115_UART_RX
+# Top-Level: uart_rx_top
+# Target   : Cyclone IV E EP4CE115F29C7 (Terasic DE2-115 Development Board)
+# ==============================================================================
+
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE115F29C7
+set_global_assignment -name TOP_LEVEL_ENTITY uart_rx_top
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
+set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
+
+# ------------------------------------------------------------------------------
+# Danh sach file VHDL
+# ------------------------------------------------------------------------------
+set_global_assignment -name VHDL_FILE ../rtl/hex_to_7seg.vhd
+set_global_assignment -name VHDL_FILE ../rtl/pulse_stretcher.vhd
+set_global_assignment -name VHDL_FILE ../rtl/uart_tx.vhd
+set_global_assignment -name VHDL_FILE ../rtl/uart_rx.vhd
+set_global_assignment -name VHDL_FILE ../rtl/uart_rx_top.vhd
+set_global_assignment -name SDC_FILE DE2_115_UART_RX.sdc
+
+# ------------------------------------------------------------------------------
+# Gan chan CLOCK_50 (50 MHz)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_Y2 -to CLOCK_50
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+
+# ------------------------------------------------------------------------------
+# Gan chan UART RS-232 (Cổng DB9 qua chip chuyển mức MAX3232)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_G12 -to UART_RXD
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RXD
+
+set_location_assignment PIN_G9 -to UART_TXD
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TXD
+
+# ------------------------------------------------------------------------------
+# Gan chan Push Button (KEY)
+# KEY[0]: Reset he thong (Active-Low)
+# KEY[1]: Xoa co Framing Error (Active-Low)
+# KEY[2]: Phat du lieu On-board tu SW[7..0] (Active-Low)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_M23 -to KEY[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[0]
+
+set_location_assignment PIN_M21 -to KEY[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[1]
+
+set_location_assignment PIN_N21 -to KEY[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[2]
+
+# ------------------------------------------------------------------------------
+# Gan chan Cong tac gat (SW)
+# SW[7..0] : 8 bit du lieu phat On-board
+# SW[17]   : Che do hoat dong (1 = On-Board Loopback Test, 0 = External PC DB9)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_AB28 -to SW[0]
+set_location_assignment PIN_AC28 -to SW[1]
+set_location_assignment PIN_AC27 -to SW[2]
+set_location_assignment PIN_AD27 -to SW[3]
+set_location_assignment PIN_AB27 -to SW[4]
+set_location_assignment PIN_AC26 -to SW[5]
+set_location_assignment PIN_AD26 -to SW[6]
+set_location_assignment PIN_AB26 -to SW[7]
+set_location_assignment PIN_AC25 -to SW[8]
+set_location_assignment PIN_AB25 -to SW[9]
+set_location_assignment PIN_AC24 -to SW[10]
+set_location_assignment PIN_AB24 -to SW[11]
+set_location_assignment PIN_AB23 -to SW[12]
+set_location_assignment PIN_AA24 -to SW[13]
+set_location_assignment PIN_AA23 -to SW[14]
+set_location_assignment PIN_AA22 -to SW[15]
+set_location_assignment PIN_Y24 -to SW[16]
+set_location_assignment PIN_Y23 -to SW[17]
+
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[6]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[7]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[8]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[9]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[10]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[11]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[12]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[13]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[14]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[15]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[16]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to SW[17]
+
+# ------------------------------------------------------------------------------
+# Gan chan LED do (LEDR)
+# LEDR[7..0]   : 8 bit du lieu nhan duoc
+# LEDR[8]      : Xung bao rx_done keo dai 100 ms
+# LEDR[9]      : Co bao loi khung truyen (Framing Error)
+# LEDR[12..10] : Ma hoa trang thai FSM Moore (000=IDLE .. 101=DONE)
+# LEDR[15..13] : Du phong
+# LEDR[16]     : Bao UART TX dang ban truyen (tx_busy)
+# LEDR[17]     : Bao che do On-Board Test Mode dang BAT (SW[17] = 1)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_G19 -to LEDR[0]
+set_location_assignment PIN_F19 -to LEDR[1]
+set_location_assignment PIN_E19 -to LEDR[2]
+set_location_assignment PIN_F21 -to LEDR[3]
+set_location_assignment PIN_F18 -to LEDR[4]
+set_location_assignment PIN_E18 -to LEDR[5]
+set_location_assignment PIN_J19 -to LEDR[6]
+set_location_assignment PIN_H19 -to LEDR[7]
+set_location_assignment PIN_J17 -to LEDR[8]
+set_location_assignment PIN_G17 -to LEDR[9]
+set_location_assignment PIN_J15 -to LEDR[10]
+set_location_assignment PIN_H16 -to LEDR[11]
+set_location_assignment PIN_J16 -to LEDR[12]
+set_location_assignment PIN_H17 -to LEDR[13]
+set_location_assignment PIN_F15 -to LEDR[14]
+set_location_assignment PIN_G15 -to LEDR[15]
+set_location_assignment PIN_G16 -to LEDR[16]
+set_location_assignment PIN_H15 -to LEDR[17]
+
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[6]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[7]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[8]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[9]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[10]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[11]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[12]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[13]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[14]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[15]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[16]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[17]
+
+# ------------------------------------------------------------------------------
+# Gan chan LED 7 doan HEX0 (Low Nibble: bit 3..0)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_G18 -to HEX0[0]
+set_location_assignment PIN_F22 -to HEX0[1]
+set_location_assignment PIN_E17 -to HEX0[2]
+set_location_assignment PIN_L26 -to HEX0[3]
+set_location_assignment PIN_L25 -to HEX0[4]
+set_location_assignment PIN_J22 -to HEX0[5]
+set_location_assignment PIN_H22 -to HEX0[6]
+
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[6]
+
+# ------------------------------------------------------------------------------
+# Gan chan LED 7 doan HEX1 (High Nibble: bit 7..4)
+# ------------------------------------------------------------------------------
+set_location_assignment PIN_M24 -to HEX1[0]
+set_location_assignment PIN_Y22 -to HEX1[1]
+set_location_assignment PIN_W21 -to HEX1[2]
+set_location_assignment PIN_W22 -to HEX1[3]
+set_location_assignment PIN_W25 -to HEX1[4]
+set_location_assignment PIN_U23 -to HEX1[5]
+set_location_assignment PIN_U24 -to HEX1[6]
+
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[6]
